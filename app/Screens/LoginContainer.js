@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, AsyncStorage } from 'react-native'
 import { LoginManager, AccessToken } from 'react-native-fbsdk'
 import { GoogleSignin } from 'react-native-google-signin'
+import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import LoginScreen from './LoginScreen'
 import Loading from './Loading'
@@ -44,7 +46,12 @@ class LoginContainer extends React.Component {
   async _googleLogin() {
     try {
       const user = await GoogleSignin.signIn()
-      await AsyncStorage.setItem(TOKEN,user.idToken)
+      const mutationResult = await this.props.googleLoginMutation({
+        variables: {
+          googleToken: user.idToken
+        }
+      })
+      await AsyncStorage.setItem(TOKEN, mutationResult.data.authenticateGoogleUser.token)
       this.setState({ isSignedIn: true })
     } catch(e) {
       console.log('google signin error', e)
@@ -58,7 +65,12 @@ class LoginContainer extends React.Component {
         alert('Login cancelled')
       } else {
         const accessTokenData = await AccessToken.getCurrentAccessToken()
-        await AsyncStorage.setItem(TOKEN, accessTokenData.accessToken.toString())
+        const mutationResult = await this.props.fbLoginMutation({
+          variables: {
+            facebookToken: accessTokenData.accessToken.toString()
+          }
+        })
+        await AsyncStorage.setItem(TOKEN, mutationResult.data.authenticateUser.token)
         this.setState({ isSignedIn: true })
       }
     } catch(e) {
@@ -102,4 +114,27 @@ class LoginContainer extends React.Component {
   }
 }
 
-export default LoginContainer
+const GOOGLE_LOGIN_MUTATION = gql`
+  mutation($googleToken: String!) {
+    authenticateGoogleUser(
+      googleToken: $googleToken
+    ) {
+      token
+    }
+  }
+`
+
+const FB_LOGIN_MUTATION = gql`
+  mutation($facebookToken: String!) {
+    authenticateUser(
+      facebookToken: $facebookToken
+    ) {
+      token
+    }
+  }
+`
+
+export default compose(
+  graphql(GOOGLE_LOGIN_MUTATION, { name: "googleLoginMutation"}),
+  graphql(FB_LOGIN_MUTATION, { name: "fbLoginMutation"})
+)(LoginContainer)

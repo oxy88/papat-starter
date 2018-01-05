@@ -1,3 +1,5 @@
-export const TOKEN = "" // please input
-export const IOS_CLIENT_ID = "" // please input
-export const WEB_CLIENT_ID = "" // please input
+export const TOKEN = ""
+export const IOS_CLIENT_ID = ""
+export const WEB_CLIENT_ID = ""
+export const SIMPLE_API = ""
+export const SUBSCRIPTIONS_API = ""

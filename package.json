@@ -8,12 +8,23 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "apollo-cache-inmemory": "^1.1.4",
+    "apollo-client": "^2.0.4",
+    "apollo-link": "^1.0.7",
+    "apollo-link-context": "^1.0.3",
+    "apollo-link-http": "^1.3.2",
+    "apollo-link-ws": "^1.0.4",
+    "apollo-utilities": "^1.0.3",
+    "graphql": "^0.12.3",
+    "graphql-tag": "^2.6.1",
     "plist": "^2.1.0",
     "react": "16.0.0",
+    "react-apollo": "^2.0.4",
     "react-native": "0.51.0",
     "react-native-fbsdk": "^0.7.0",
     "react-native-google-signin": "^0.12.0",
     "react-navigation": "^1.0.0-beta.23",
+    "subscriptions-transport-ws": "^0.9.4",
     "xcode": "^1.0.0"
   },
   "devDependencies": {
